@@ -1,9 +1,38 @@
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { GithubIcon } from "lucide-react";
+import { GithubIcon, Loader } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
+import { toast } from "sonner";
+import { useTransition } from "react";
+
 export default function LoginPage() {
+  const [githubPending, startGithubTransition] = useTransition();
+
+  /*
+    is recommed
+  */
+
+  async function signWithGithub() {
+    startGithubTransition(async () => {
+      await authClient.signIn.social({
+        provider: "github",
+        callbackURL: "/",
+        fetchOptions: {
+          onSuccess: () => {
+            toast.success("Sign in with Github, you will be redirected....");
+          },
+          onError: (error) => {
+            toast.error("Internal server error");
+          },
+        },
+      });
+    });
+  }
+
   return (
     <Card>
       <CardHeader>
@@ -12,9 +41,23 @@ export default function LoginPage() {
       </CardHeader>
 
       <CardContent className="flex flex-col gap-4">
-        <Button className="w-full cursor-pointer" variant="outline">
-          <GithubIcon className="size-4" />
-          Sign with Github
+        <Button
+          disabled={githubPending}
+          onClick={signWithGithub}
+          className="w-full cursor-pointer"
+          variant="outline"
+        >
+          {githubPending ? (
+            <>
+              <Loader className="size-4 animate-spin" />
+              <span>Loading...</span>
+            </>
+          ) : (
+            <>
+              <GithubIcon className="size-4" />
+              Sign in with Github
+            </>
+          )}
         </Button>
 
         <div
