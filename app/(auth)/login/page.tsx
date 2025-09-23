@@ -25,7 +25,7 @@ export default function LoginPage() {
           onSuccess: () => {
             toast.success("Sign in with Github, you will be redirected....");
           },
-          onError: (error) => {
+          onError: () => {
             toast.error("Internal server error");
           },
         },

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, BookAIcon, LeafyGreenIcon } from "lucide-react";
+import { ArrowLeft, LeafyGreenIcon } from "lucide-react";
 import { ReactNode } from "react";
 import { buttonVariants } from "@/components/ui/button";
 
