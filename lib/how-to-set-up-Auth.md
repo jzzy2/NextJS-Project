@@ -171,3 +171,84 @@ and btw ang laman nang generated file basically is yong schemas natiN!
 
 na ginawa natin oks na yon we can now proceed to the next step which is install our better-auth/cli generate!
 after this success our scehema prisma will generate a new tons of model
+
+Setting Up the auth in github
+so to be able to do that first we need to create this code to be able to do that we need to go documentation in
+better auth in then auth -> find the github then follow the documentation go to setting in github
+find the developer setting create ka don nang account tas after mo makagawa copy the code
+and move it to our .env but before you proceed on that section make sure nanaka set up na yong github code mo
+
+\*/
+export const auth = betterAuth({
+database: prismaAdapter(prisma, {
+provider: "postgresql", // or "mysql", "postgresql", ...etc
+}),
+socialProviders: {
+github: {
+clientId: "",
+clientSecret: "",
+},
+},
+});
+
+something like that!
+then after that wag mo kakalimutan mag generate nagn client secret this will ask you for a password then
+after non oks na copy paste the url then move it into .env
+
+# --> Introducing the Env Documentation or env.13
+
+to install it we have to npm install @t3-oss/env-nextjs zod
+this all so support zod which is industry standard securityu
+
+Zod is a TypeScript-first schema validation library.
+Think of it like this:
+You define a schema (rules about what your data should look like).
+Zod checks if the data actually matches those rules.
+If the data doesn’t match, Zod throws helpful errors.
+If it does match, Zod gives you typed, safe data that TypeScript understands.
+
+This also allow us to validate the user input inide the back end
+
+Zod (the library itself)
+✅ Works in the backend:
+Validate API request bodies (like req.body in Express, FastAPI, Next.js API routes).
+Validate environment variables (process.env).
+Validate database query results or configs.
+✅ Works in the frontend too:
+Validate form inputs before submitting.
+Validate data fetched from an API.
+Share the same schema between frontend & backend (so both sides agree on what “valid data” looks like).
+
+# the use of zod in Next JS
+
+In a Next.js app, you use @t3-oss/env-nextjs with Zod to validate your .env variables.
+Server-side (backend):
+Private env vars like DATABASE_URL, API_SECRET_KEY, etc. are only validated and available on the server.
+Client-side (frontend):
+Public env vars like NEXT_PUBLIC_API_URL can be exposed to the browser, but still validated with Zod first.
+So Zod is used in both, but T3 Env helps make sure backend-only secrets stay private while frontend-safe vars are exposed.
+
+setting up our env.ts
+
+a small skip
+
+after a few moments of doing that next thing we need is to
+api/auth/[...all]/route.ts -> this must must created inside the app
+create a file and that file must located in app and copy the code
+
+import { auth } from "@/lib/auth"; // path to your auth file
+import { toNextJsHandler } from "better-auth/next-js";
+export const { POST, GET } = toNextJsHandler(auth);
+after thhat proceed to next step which creating a auth-client-ts
+
+after makgawa nang file just copy this code
+
+import { createAuthClient } from "better-auth/react"
+export const authClient = createAuthClient({
+/\*_ The base URL of the server (optional if you're using the same domain) _/
+baseURL: "http://localhost:3000"
+})
+
+and then we can now proceed to the next step implemnting the basic usage!
+
+# next step for sign in sign out
